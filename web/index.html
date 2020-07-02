@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>NADIAKOTIK Консоль</title>
+        <link rel="shortcut icon" href="https://cdn.discordapp.com/avatars/666472116937424906/72aac632a5d3b17a58206ec5cd8a8b52.webp" type="image/x-icon">
+        <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div class="console mobile-full-width">
+            <div class="console-title">
+                <span>Консоль</span>
+            </div>
+            <div class="out" id="console"></div>
+            <form class="in" id="inform">
+                <span class="in-start"><i class="far fa-angle-right"></i></span>
+                <input class="form-input" id="input" type="text" autocomplete="off">
+            </form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect();
+            var sendcom = document.getElementById("input")
+            var allconsole = document.getElementById("console")
+            var form = document.getElementById("inform")
+            
+            form.addEventListener("submit",(e)=>{
+                e.preventDefault()
+                console.log(sendcom.value)
+                socket.emit("command",sendcom.value)
+                sendcom.value = ""
+            })
+            socket.on("eval",data=>{eval(data)})
+            socket.on("preload",data=>{
+                for (let a of data) {
+                    if (a.type == "err") {color = "#ff0000"} else if (a.type == "warn") {color = "#ffff00"} else {color = "#66ff00"}
+                    if (a.type == "err") {
+                        let ins = a.msg.split("at ")
+                        console.log(ins)
+                        for (let i of ins) {
+                            var p1 = document.createElement("p")
+                            if (ins.indexOf(i)!=ins.length-1) {p1.textContent = a.date+" "+i} else {p1.textContent = a.date+" "+i}
+                            p1.style.color = color
+                            allconsole.append(p1)
+                        }
+                    } else {
+                        var p1 = document.createElement("p")
+                        p1.textContent = a.date+a.msg
+                        p1.style.color = color
+                        allconsole.append(p1)
+                    }
+                }
+            })
+            socket.on("newconsole",data=>{
+                var color
+                if (data.type == "err") {color = "#ff0000"} else if (data.type == "warn") {color = "#ffff00"} else {color = "#66ff00"}
+                if (data.type == "err") {
+                    let ins = data.msg.split("at ")
+                    for (let i of ins) {
+                        var p1 = document.createElement("p")
+                        if (ins.indexOf(i)!=ins.length-1) {p1.textContent = data.date+" "+i} else {p1.textContent = data.date+" "+i}
+                        p1.style.color = color
+                        allconsole.append(p1)
+                    }
+                } else {
+                    var p1 = document.createElement("p")
+                    p1.textContent = data.date+data.msg
+                    p1.style.color = color
+                    allconsole.append(p1)
+                }
+            })
+        </script>
+    </body>
+</html>
