@@ -122,31 +122,33 @@ try {
     app.get("/styles.css", (req, res) => {
         res.sendFile(path.join(__dirname, "/web/styles.css"))
     })
-    io.sockets.on("connection", (socket) => {
-        var alloweduser = false
-        var mess = { msg: "=> Server returned error status 403 [Access forbidden]!", type: "err", date: moment().format("DD-MM-YYYY hh:mm:ss ") }
-        for (var i of data.allowed) {
-            if (i == socket.handshake.headers["x-forwarded-for"]) { alloweduser = true }
-        }
-        if (alloweduser == false) {
-            socket.emit("newconsole", mess)
-            socket.disconnect()
-            console.log(socket.handshake.headers["x-forwarded-for"] + " || " + socket.handshake.headers["user-agent"] + " => The new user tried to connect, the request was rejected with an error 403 [Access forbidden] to give access use allow(" + socket.conn.remoteAddress + ")", "err")
-            return true
-        }
-        socket.emit("preload", consolelogger)
-        connections.push(socket)
-        console.log("✅ " + socket.handshake.headers["x-forwarded-for"] + " подключился к консоли!", "warn")
-        socket.on("disconnect", (reason) => {
-            console.log("❌ " + socket.handshake.headers["x-forwarded-for"] + " отключился от консоли!", "warn")
-            connections.splice(connections.indexOf(socket), 1)
+    setTimeout(() => {
+        io.sockets.on("connection", (socket) => {
+            var alloweduser = false
+            var mess = { msg: "=> Server returned error status 403 [Access forbidden]!", type: "err", date: moment().format("DD-MM-YYYY hh:mm:ss ") }
+            for (var i of data.allowed) {
+                if (i == socket.handshake.headers["x-forwarded-for"]) { alloweduser = true }
+            }
+            if (alloweduser == false) {
+                socket.emit("newconsole", mess)
+                socket.disconnect()
+                console.log(socket.handshake.headers["x-forwarded-for"] + " || " + socket.handshake.headers["user-agent"] + " => The new user tried to connect, the request was rejected with an error 403 [Access forbidden] to give access use allow(" + socket.conn.remoteAddress + ")", "err")
+                return true
+            }
+            socket.emit("preload", consolelogger)
+            connections.push(socket)
+            console.log("✅ " + socket.handshake.headers["x-forwarded-for"] + " подключился к консоли!", "warn")
+            socket.on("disconnect", (reason) => {
+                console.log("❌ " + socket.handshake.headers["x-forwarded-for"] + " отключился от консоли!", "warn")
+                connections.splice(connections.indexOf(socket), 1)
+            })
+            socket.on("command", command => {
+                try {
+                    eval(command);
+                } catch (err) { console.log(err, "err") }
+            })
         })
-        socket.on("command", command => {
-            try {
-                eval(command);
-            } catch (err) { console.log(err, "err") }
-        })
-    })
+    }, 3000)
     bot.on("inviteCreate", invite => {
         if (invite.guild.members.cache.get(bot.user.id).hasPermission("ADMINISTRATOR") == false) return
         invite.guild.fetchInvites().then(invites => lastInvites[invite.guild.id] = invites.array())
