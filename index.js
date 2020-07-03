@@ -16,11 +16,10 @@ const fs = require("fs")
 var data
 var mondb
 const mongosettings = {
-    user: "5e48569ae9d92f3a0ccb5bcacade0c8b",
+    user: "Kvantuum",
     pass: "Zlocat2005",
-    host: "9a.mongo.evennode.com:27017,9b.mongo.evennode.com:27017",
-    dbname: "5e48569ae9d92f3a0ccb5bcacade0c8b",
-    replica: "eu-9"
+    host: "cluster0.15iaa.mongodb.net:27017,cluster0-shard-00-01.15iaa.mongodb.net:27017",
+    dbname: "test",
 }
 var newconsole = (function (oldCons) {
     return {
@@ -68,7 +67,8 @@ var newconsole = (function (oldCons) {
     };
 }(console));
 console = newconsole;
-mdbclient.connect(`mongodb://${mongosettings.user}:${mongosettings.pass}@${mongosettings.host}/${mongosettings.dbname}?replicaSet=${mongosettings.replica}`, { useUnifiedTopology: true }, (err, MongoClient) => {
+mdbclient.connect(`mongodb://${mongosettings.user}:${mongosettings.pass}@${mongosettings.host}/${mongosettings.dbname}?replicaSet=atlas-lmfena-shard-0&ssl=true&authSource=admin`, { useUnifiedTopology: true }, (err, MongoClient) => {
+    if (err) console.log(err)
     mondb = MongoClient.db()
     mondb.collection("NADIAKOTIK").find().toArray((err, res) => {
         data = res[0]
