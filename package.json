@@ -30,7 +30,8 @@
   "name": "millearmis",
   "rawversion": 0,
   "scripts": {
-    "start": "node index"
+    "start": "node index",
+    "build": "node index"
   },
   "version": "1.0.7"
 }
