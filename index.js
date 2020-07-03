@@ -576,6 +576,7 @@ try {
             _id: ObjectID("5ec44b879dcb822ccc704207")
         }, writing)
     }
+    
     function createDataCenter(id) {
         if (!data.configurations[id]) {
             data.configurations[id] = {
