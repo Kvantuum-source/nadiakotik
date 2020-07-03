@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, data) => {
     var num = 0
     bot.guilds.cache.forEach(guild => { num = num + guild.memberCount })
     let resMsg = await message.channel.send('Измерение пинга...');
-    let ping = Math.round((resMsg.createdTimestamp - msg.createdTimestamp) - bot.ping)
+    let ping = Math.round((resMsg.createdTimestamp - message.createdTimestamp) - bot.ping)
     embed.setAuthor("Информация о боте", "https://orenburg.stroylandiya.ru/local/client/img/loading.gif")
         .setColor("#c96c2e")
         .setThumbnail("https://cdn.discordapp.com/attachments/594291839297912843/681077647496839303/kisspng-information-technology-business-managed-services-c-system-5abf3780b61946.5359043015224810247.png")
