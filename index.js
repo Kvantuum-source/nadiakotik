@@ -16,9 +16,9 @@ const fs = require("fs")
 var data
 var mondb
 const mongosettings = {
-    user: "Kvantuum",
-    pass: "Zlocat2005",
-    host: "cluster0.15iaa.mongodb.net:27017,cluster0-shard-00-01.15iaa.mongodb.net:27017",
+    user: "",
+    pass: "",
+    host: "",
     dbname: "test"
 }
 var newconsole = (function (oldCons) {
