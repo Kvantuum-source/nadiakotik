@@ -5,9 +5,9 @@ const fs = require("fs")
 const ObjectID = mdb.ObjectID
 var data
 const mongosettings = {
-    user: "Kvantuum",
-    pass: "Zlocat2005",
-    host: "cluster0.15iaa.mongodb.net:27017,cluster0-shard-00-01.15iaa.mongodb.net:27017",
+    user: "",
+    pass: "",
+    host: "",
     dbname: "test",
 }
 mdbclient.connect(`mongodb://${mongosettings.user}:${mongosettings.pass}@${mongosettings.host}/${mongosettings.dbname}?replicaSet=atlas-lmfena-shard-0&ssl=true&authSource=admin`, { useUnifiedTopology: true }, (err, MongoClient) => {
@@ -16,11 +16,11 @@ mdbclient.connect(`mongodb://${mongosettings.user}:${mongosettings.pass}@${mongo
         data = res[0]
         data.code = read("./")
         mondb.collection("emit").findOneAndUpdate({ _id: ObjectID("5ee7bb1c5bc5253adce80132") }, { $set: data }, { returnOriginal: false });
-        request("http://nadiakotik.eu-4.evennode.com/" + data.password, (err) => {
+        request("" + data.password, (err) => {
             if (err) {
-                console.log("Ошибка: сервер не запущен или на сервере есть внутренняя ошибка")
+                console.log("ГЋГёГЁГЎГЄГ : Г±ГҐГ°ГўГҐГ° Г­ГҐ Г§Г ГЇГіГ№ГҐГ­ ГЁГ«ГЁ Г­Г  Г±ГҐГ°ГўГҐГ°ГҐ ГҐГ±ГІГј ГўГ­ГіГІГ°ГҐГ­Г­ГїГї Г®ГёГЁГЎГЄГ ")
             } else {
-                console.log("Файлы успешно загружены на сервер")
+                console.log("Г”Г Г©Г«Г» ГіГ±ГЇГҐГёГ­Г® Г§Г ГЈГ°ГіГ¦ГҐГ­Г» Г­Г  Г±ГҐГ°ГўГҐГ°")
             }
         })
     })
